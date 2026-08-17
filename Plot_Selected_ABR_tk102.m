@@ -1,4 +1,4 @@
-%% Plot_Selected_ABR_tk102
+%% Plot_ABR_Selected_tk102
 % this mfile  plots the selected ABR for gecko TK102, right ear for all frequencies
 % tested and relevant amplitudes. This plot is used later to determine by
 % visual inspection by two independent observers the ABR threshold. 
