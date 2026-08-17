@@ -4,7 +4,7 @@
 % The idea is ABR should be similar if the hearing organ has no damage. 
 % april, 2025, yvz
 
-% this function plots the selected ABR for TK99
+% this function plots the selected ABR traces for TK99 which are seen on  Figure4B
 % 03/25/2026
 clear all;
 close all;
