@@ -1,60 +1,63 @@
-% Plot_Selected_ABR_tk105
-% this mfile  plots the selected ABR for gecko TK105 for all frequencies
-% tested and relevant amplitudes. This plot is used later to determine by
+% Plot_Selected_ABR_tk98
+% this mfile  plots the selected ABR for gecko TK98 for all frequencies
+% tested and relevant amplitudes -without noise or weird bumps. This plot is used later to determine by
 % visual inspection by two independent observers the ABR threshold. 
 % ABR threshold is the amplitude at which you can see a response to the
 % stimulation. 
 % 03/25/2026, yvz
-
-
 clear all
 close all
 
-geckoID = 'tk105_L' %Tk-105, Left Ear before & after Surgery
+geckoID = 'tk98_R' %Tk-98, Right Ear before & after Surgery
+printThis=0;
 
-print=0;
+
+s=0;
+DataPath ='/Users/yuriria/Documents/MATLAB/HUDSPETH_LAB/Gecko_ABR/2026-03-19_Tk99/2026-03-19.02'
+
+cd(DataPath)
+%% load the parameter files & Select NonSurgery & Surgery Files
+[num, txt, raw]=xlsread("parameters.xls",-1);
+matrix = txt(2:end,2)
+str = string(matrix);
+tf = contains(str, "surgery", "IgnoreCase", true); % logical mask
+idx_s = find(tf); % indx of files after surgery
+idx_ns = find(~tf);  % indx of files NO surgery"
+
+SurgeryFiles = matrix(idx_s);      % surgery files
+nonSurgeryFiles = matrix(idx_ns);     % non surgery
+
+
+%% use only the selected files
+
+% good before surgery
+% 104857 --> 500 Hz (4)
+% 105343 --> 2550 Hz (6)
+% 105708 --> 5000 Hz (8)
+
+% good after surgery
+% 115013 --> 500  Hz  (12)
+% 115302 ---> 2550 Hz (13)
+% 120705 ---> 5000 Hz (28)
+
+%% 
 %% Choose Files Before or After Surgery
 all_s=[0 1];
 
 for thisS=1:length(all_s)
+
     s=all_s(thisS);
-%% load the parameter files & Select NonSurgery & Surgery Files
-    if s==0
-        DataPath = '/Users/yuriria/Documents/MATLAB/HUDSPETH_LAB/Gecko_ABR/2026-03-24- Tk105/2026-03-24.02' % non surgery
-        cd(DataPath)
-        
-        [num, txt, raw]=xlsread("parameters.xls",-1);
-        matrix = txt(2:end,2)
-        str = string(matrix);
-        tf = contains(str, "surgery", "IgnoreCase", true); % logical mask
-        idx_s = find(tf); % indx of files after surgery
-        idx_ns = find(~tf);  % indx of files NO surgery"
-        nonSurgeryFiles = matrix(idx_ns)    % non surgery
-    elseif s==1
-        DataPath ='/Users/yuriria/Documents/MATLAB/HUDSPETH_LAB/Gecko_ABR/2026-03-24- Tk105/2026-03-24.03'% get to the next dir for surgery files
-        cd(DataPath)
-        [num, txt, raw]=xlsread("parameters.xls",-1);
-        matrix = txt(2:end,2)
-        str = string(matrix);
-        tf = contains(str, "surgery", "IgnoreCase", true); % logical mask
-        idx_s = find(tf); % indx of files after surgery
-        SurgeryFiles = matrix(idx_s)   % surgery files
-    end
-
-
-    %% use only the selected files
     if s==0
         idx = idx_ns;
         label_surgery =' '
-        sel_indx = [2 4 5];
+        sel_indx = [3 5 7];
         n_graph = [1 3 5];
     elseif s==1
         idx =idx_s;
         label_surgery =' After Surgery'
-        sel_indx = [9 7 8];
+        sel_indx = [2 3 18];
         n_graph = [2 4 6];
     end
-
     all_files =  txt(2:end,1);
     selected_Files = all_files(idx(sel_indx)); % files with meta info -excel file
 
@@ -72,7 +75,6 @@ for thisS=1:length(all_s)
         load(fname)
         M = readmatrix(fname); %  M= Amplidue of Stimulation(1,:); Volage(2:end,:)
 
-
         fs = 100000; % 100 kHz
         % Determine the sampling period and time vector
         T = 1/fs; % Sampling period
@@ -81,7 +83,7 @@ for thisS=1:length(all_s)
         % all amplitudes for this frequency!
         all_amp = sort(unique(M(1,:)),'ascend');
 
-        c = ([colormap; colormap; colormap;  colormap; colormap]);
+        c = ([colormap; colormap; colormap; colormap; colormap; colormap; colormap; colormap]);
         contador = 1;
         contador2 = 1;
 
@@ -89,16 +91,19 @@ for thisS=1:length(all_s)
         labels=[];
         figure(1);
         subplot(3,2,n_graph(thisF)); hold on;
-        % this is a subselection of amplitudes showing clear responses to
-        % determine the ABR. 
-        if thisFreq == 500
-            i_start = 4; i_end = 2; %   before (42db) & after (47db) ok!
-        elseif thisFreq ==2550 && s==0
-            i_start =6;  i_end = 2;
-        elseif thisFreq ==2550 && s==1
-            i_start =5;  i_end = 4;
-        elseif thisFreq ==5000
-            i_start =7; i_end = 2; %
+
+        if thisFreq == 500 && s==0
+            i_start = 4; i_end=8; % fine before [4 8]
+        elseif thisFreq == 500 && s==1
+            i_start = 5; i_end=5; % fine after [5 5]
+        elseif thisFreq ==2550 && s==0 %fine before [3 9]
+            i_start = 3; i_end=9;
+        elseif thisFreq ==2550 && s==1 % fine before [5 6]
+            i_start = 5; i_end=6;
+        elseif thisFreq ==5000 && s==0 % fine before [7 3]
+            i_start =7; i_end=3;
+        elseif thisFreq ==5000 && s==1 % fine before [7 3]
+            i_start =10; i_end=0;
         end
 
         for a=i_start:length(all_amp)-i_end
@@ -108,19 +113,18 @@ for thisS=1:length(all_s)
                 labels = [labels; all_amp(a)];
 
             end
-            contador = contador + 50; % Shift the next trace to a different position in graph
-            contador2 = contador2 +30; % Shift color for plotting. 
+            contador = contador + 30; % Increment the color index for the next plot
+            contador2 = contador2 + 170; % plot in position above
         end
 
         % Set axis labels and grid
         xlabel('Time (s)');
         grid on;
-        xlim([0 0.025])
 
         subplot(3,2,n_graph(thisF));
         ax=gca;
         ax.Title.String =[geckoID, '  ', fname(1:end-4) ', ' num2str(thisFreq) 'Hz ' label_surgery];
-
+        xlim([0 0.025])
         string_labels = cellstr(num2str(labels(:)));  % ensure column vector
         lgd =legend(ax,string_labels, 'Location','northeastoutside')
         % Remove the box (legend box outline) by setting the Box property to 'off'
@@ -128,29 +132,28 @@ for thisS=1:length(all_s)
         labels=[];
         set(ax, 'YTickLabel', []);
         set(ax, 'XTickLabel', []);
-        xlabel('Time ');
-        ylabel('Voltage')
-
-
     end
 end
 
-if print ==1
-    cd('/Users/yuriria/Documents/MATLAB/HUDSPETH_LAB/Gecko_ABR/2026-03-24- Tk105')
-    filename = 'ABR_tk105_Normal_n_Surgery_allAmp_Zoom'
-    savefig(filename)
+cd '/Users/yuriria/Documents/MATLAB/HUDSPETH_LAB/Gecko_ABR/2026-03-19-Tk98'
+
+
+if printThis ==1
+    fname1 = 'ABR_tk98_Normal_n_Surgery_allFreq_Zoom_v2'
+    savefig(fname1)
+    print(fname1,'-dtiff')
 end
 
+%%% This was used to save the ABR thresholds in an mfile, after visual inspection & cross-validation 
+ToSaveABR=0;
 
-ToSaveABR=0; 
-%% This was used to save the ABR thresholds in an mfile, after visual inspection & cross-validation 
-if ToSaveABR==1;
+if ToSaveABR==1
     field1 = 'freqStim';
     value1 =[500, 2550, 5000];
     field2 ='BeforeSurgery';
-    value2=[42, 52, 62]; % ABR determined using visual inspection
+    value2=[32, 22, 47]; % ABR determined using visual inspection
     field3 = 'AfterSurgery';
-    value3=[47, 47, 62];
+    value3=[37, 37 72];
     s = struct(field1,value1,field2,value2,field3,value3)
     fname =[geckoID, '_ABRs'];
     save(fname,'s')

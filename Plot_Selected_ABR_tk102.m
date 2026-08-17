@@ -1,4 +1,4 @@
-%% Plot_ABR_Selected_tk102
+%% Plot_Selected_ABR_tk102
 % this mfile  plots the selected ABR for gecko TK102, right ear for all frequencies
 % tested and relevant amplitudes. This plot is used later to determine by
 % visual inspection by two independent observers the ABR threshold. 
@@ -119,7 +119,7 @@ for thisS=1:length(all_s)
                 labels = [labels; all_amp(a)];
 
             end
-            contador = contador + 50; % Increment in postion in plot
+            contador = contador + 50; % Increment in position in plot
             contador2 = contador2 +30; % color shift
         end
 
@@ -154,19 +154,19 @@ elseif print ==1 && afterOCT==1
     savefig(filename)
 end
 
-% ToSaveABR=0; 
-%% This was used to save the ABR thresholds in an mfile, after visual inspection & crossvalidation 
+ToSaveABR=0; 
+%%% This was used to save the ABR thresholds in an mfile, after visual inspection & cross-validation 
 
-% if ToSaveABR==1;
-%     field1 = 'freqStim';
-%     value1 =[500, 2550, 5000];
-%     field2 ='BeforeSurgery';
-%     value2=[37, 42, 62]; % ABR determined using visual inspection
-%     field3 = 'AfterSurgery';
-%     value3=[42, 42, 62];
-%     field4='AfterSurgeryOCT';
-%     value4=[42,42,67];
-%     s = struct(field1,value1,field2,value2,field3,value3,field4,value4)
-%     fname =[geckoID, '_ABRs'];
-%     save(fname,'s')
-% end
+if ToSaveABR==1;
+    field1 = 'freqStim';
+    value1 =[500, 2550, 5000];
+    field2 ='BeforeSurgery';
+    value2=[37, 42, 62]; % ABR determined using visual inspection
+    field3 = 'AfterSurgery';
+    value3=[42, 42, 62];
+    field4='AfterSurgeryOCT';
+    value4=[42,42,67];
+    s = struct(field1,value1,field2,value2,field3,value3,field4,value4)
+    fname =[geckoID, '_ABRs'];
+    save(fname,'s')
+end
