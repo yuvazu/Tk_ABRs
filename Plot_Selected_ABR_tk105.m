@@ -1,4 +1,4 @@
-% Plot_Selected_ABR_tk105
+% Plot_ABR_tk105_Selected
 % this mfile  plots the selected ABR for gecko TK105 for all frequencies
 % tested and relevant amplitudes. This plot is used later to determine by
 % visual inspection by two independent observers the ABR threshold. 
