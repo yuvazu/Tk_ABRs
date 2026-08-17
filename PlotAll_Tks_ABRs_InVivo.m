@@ -7,7 +7,7 @@
 % set print to 1, if you want to save the figure
 ToPrint=0;
 
-% this is the path where the ABR are stored 
+% this is the path where the ABR are stored, should be changed depending on the user. 
 TargetDir = '/Users/yuriria/Dropbox/HUDSPETH_LAB/Geckos/A_Manuscript_Geckos/ABR_InVivo_ToShare';
 cd(TargetDir)
 
