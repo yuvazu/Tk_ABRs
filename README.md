@@ -1,13 +1,10 @@
 
-All mfiles  plots the selected ABR for tK subjects for all frequencies
-tested and  amplitudes. This plot is used later to determine by
-visual inspection by two independent observers the ABR threshold. 
-ABR threshold is the amplitude at which you can see a response to the
-stimulation.
+All mfiles named Plot_Selected_ABR_tk*.m --> plot the selected ABR for subjects: 98, 99,102,105, for all frequencies and relevant amplitudes tested.
+This plots were used later to determine by visual inspection by two independent observers the ABR threshold.  The ABR threshold was determined as the amplitude at which you can see a  minimal response to the stimulation.
 
-Plot_ABR_Tk99_2550 Hz --> plots the raw ABR traces for freq=2550Hz, and is related to Figure 4B. 
+Plot_ABR_Tk99_2550 Hz --> plots the raw ABR traces for frequency 2550Hz, and is related to the traces of Figure 4B. 
 
-Plot_All_Tks_ABRs_InVivo --> plots the ABR thresholds
+Plot_All_Tks_ABRs_InVivo --> plots the ABR thresholds crossvalidated by two independent observers. 
 
 
 
